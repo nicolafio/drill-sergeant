@@ -28,3 +28,10 @@ $ pip install -r requirements.txt
 $ . .venv/bin/activate
 # python3 -m flask run
 ```
+
+## Testing
+
+```
+$ . .venv/bin/activate
+# python3 -m pytest
+```
