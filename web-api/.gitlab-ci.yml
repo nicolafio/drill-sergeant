@@ -6,4 +6,4 @@ test-web-api:
   image: python:3.11
   stage: test
   before_script: *web-api-setup-script
-  script: python3 -m pytest
+  script: python3 -m pytest -s

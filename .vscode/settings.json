@@ -1,0 +1,15 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/web-api/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "pylint.cwd": "${workspaceFolder}/web-api",
+    "pylint.path": ["${workspaceFolder}/web-api/.venv/bin/pylint"],
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "python.testing.pytestArgs": [
+        "-s",
+        "web-api"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
