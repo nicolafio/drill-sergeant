@@ -27,7 +27,7 @@ def test_root_user_creation(data, client):
     assert response.mimetype == "application/json"
     assert "auth_key" in response.json
 
-def test_root_user_creation_with_auth_key(data, client, auth_headers):
+def test_root_user_creation_with_auth_key(data, client):
     data.clear()
 
     response = client.put("/v1/user/root", json = {"auth_key": TEST_AUTH_KEY})
@@ -36,8 +36,7 @@ def test_root_user_creation_with_auth_key(data, client, auth_headers):
     assert response.mimetype == "application/json"
     assert "auth_key" not in response.json
 
-    headers = auth_headers("root", TEST_AUTH_KEY)
-    response = client.get("/v1/user/root", headers = headers)
+    response = client.get("/v1/user/root", auth = ("root", TEST_AUTH_KEY))
 
     assert response.status_code == HTTPStatus.OK
 
