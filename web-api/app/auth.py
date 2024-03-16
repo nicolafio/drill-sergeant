@@ -47,6 +47,12 @@ def require_auth_key(user_to_be_accessed):
         username = authorization.username
         key = authorization.password
 
+    if username is None and request.path.startswith("/v1/user/"):
+        username = request.path.removeprefix("/v1/user/").split("/", 1)[0]
+
+    if key is None and "key" in request.args:
+        key = request.args["key"]
+
     if key is not None and "users" in data and username in data["users"]:
         saved_hashed_key = data["users"][username]["hashed_auth_key"]
         authenticated = saved_hashed_key == hash_auth_key(key)
