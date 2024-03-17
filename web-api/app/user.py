@@ -53,7 +53,7 @@ def get_user(user):
     return _get_user_representation(user)
 
 @bp.route("/<user>", methods = ["PUT", "PATCH"])
-def create_or_update_user(user):
+def _create_or_update_user(user):
     method = request.method
     root_created = "users" in data and "root" in data["users"]
     creating_root = not root_created and user == "root" and method == "PUT"
@@ -155,7 +155,7 @@ def create_or_update_user(user):
 @bp.route("/<user>", methods = ["DELETE"])
 @auth_key_required
 @user_existence_required
-def delete_user(user):
+def _delete_user(user):
     if user == "root":
         return {
             "type": "problems/deleting_root",
