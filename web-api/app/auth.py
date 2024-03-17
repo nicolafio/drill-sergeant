@@ -7,7 +7,6 @@ from functools import wraps
 from flask import request
 
 from .data import data
-from .user import bp as user_bp
 
 AUTH_KEY_MIN_CHARACTERS = 32
 AUTH_KEY_MAX_CHARACTERS = 256
@@ -40,6 +39,10 @@ def hash_auth_key(key):
     return sha256(key.encode("utf-8")).hexdigest()
 
 def require_auth_key(user_to_be_accessed):
+    # Avoiding circular import
+    # pylint: disable-next=import-outside-toplevel
+    from .user import bp as user_bp
+
     username = None
     key = None
     path = request.path
@@ -50,8 +53,8 @@ def require_auth_key(user_to_be_accessed):
         username = authorization.username
         key = authorization.password
 
-    if username is None and path.startswith(user_bp.url_prefix):
-        username = path.removeprefix(user_bp.url_prefix).split("/", 1)[0]
+    if username is None and path.startswith(user_bp.url_prefix + "/"):
+        username = path.removeprefix(user_bp.url_prefix + "/").split("/", 1)[0]
 
     if key is None and "key" in request.args:
         key = request.args["key"]
