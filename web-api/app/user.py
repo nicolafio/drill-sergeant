@@ -12,7 +12,7 @@ from .auth import hash_auth_key
 from .auth import require_auth_key
 from .auth import auth_key_required
 from .data import data
-from .data import raise_data_update
+from .data import save_data
 
 bp = Blueprint("user", __name__, url_prefix = "/v1/user")
 
@@ -137,7 +137,7 @@ def create_or_update_user(user):
         if field in request_data:
             data["users"][user][field] = request_data[field]
 
-    raise_data_update()
+    save_data()
 
     user_representation = _get_user_representation(user)
     response_code = HTTPStatus.CREATED if creating_user else HTTPStatus.OK
@@ -164,6 +164,6 @@ def delete_user(user):
 
     del data["users"][user]
 
-    raise_data_update()
+    save_data()
 
     return { "detail": f"The user {user} was deleted." }, HTTPStatus.OK

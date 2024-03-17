@@ -3,6 +3,7 @@ from weakref import WeakKeyDictionary
 from weakref import WeakSet
 
 import json
+from flask import Blueprint
 from flask import current_app
 from werkzeug.local import LocalProxy
 
@@ -13,6 +14,8 @@ from werkzeug.local import LocalProxy
 _DATA = WeakKeyDictionary()
 _DATA_FILE_PATHS = WeakKeyDictionary()
 _DATA_NEEDS_SAVING = WeakSet()
+
+bp = Blueprint("data", __name__)
 
 def _get_app_ref(app):
     if isinstance(app, LocalProxy):
@@ -43,21 +46,19 @@ def get_data(app = current_app):
 
     return _DATA[ref]
 
-def raise_data_update(app = current_app):
-    """
-    Notifies that the data for the given app has changed and needs to be saved.
-    """
+def save_data(app = current_app):
     ref = _get_app_ref(app)
 
     _DATA_NEEDS_SAVING.add(ref)
 
 data = LocalProxy(get_data)
 
-def save_data_if_needed(app = current_app):
-    ref = _get_app_ref(app)
+@bp.after_app_request
+def _after_request(response):
+    ref = _get_app_ref(current_app)
 
     if ref in _DATA_NEEDS_SAVING:
-        if not app.testing:
+        if not current_app.testing:
             with open(_DATA_FILE_PATHS[ref], "w+", encoding="utf-8") as file:
                 json.dump(
                     obj = _DATA[ref],
@@ -68,3 +69,5 @@ def save_data_if_needed(app = current_app):
                 )
 
         _DATA_NEEDS_SAVING.remove(ref)
+
+    return response
