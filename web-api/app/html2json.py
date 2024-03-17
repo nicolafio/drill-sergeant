@@ -1,3 +1,11 @@
+"""
+This module helps to translate on the fly to JSON form the default HTML problems
+from Flask.
+
+As Drill Sergeant is primarily a JSON-based web API, I'd like to give responses
+in JSON format whenever possible. I haven't found a better way to instruct Flask
+to give problem responses in JSON.
+"""
 from http import HTTPStatus
 import json
 
