@@ -10,7 +10,7 @@ def test_hello(data, client):
     keys = [root_key, joe_key]
 
     for user, key in zip(users, keys):
-        response = client.get(f"/v1/{user}/hello", auth = (user, key))
+        response = client.get(f"/v1/user/{user}/hello", auth = (user, key))
         assert response.status_code == HTTPStatus.OK
         assert response.mimetype == "application/json"
         assert response.json["message"] == f"Hello, {user}!"

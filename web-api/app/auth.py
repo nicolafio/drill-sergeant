@@ -5,7 +5,9 @@ from uuid import uuid4
 from functools import wraps
 
 from flask import request
+
 from .data import data
+from .user import bp as user_bp
 
 AUTH_KEY_MIN_CHARACTERS = 32
 AUTH_KEY_MAX_CHARACTERS = 256
@@ -40,6 +42,7 @@ def hash_auth_key(key):
 def require_auth_key(user_to_be_accessed):
     username = None
     key = None
+    path = request.path
     authorization = request.authorization
     authenticated = False
 
@@ -47,8 +50,8 @@ def require_auth_key(user_to_be_accessed):
         username = authorization.username
         key = authorization.password
 
-    if username is None and request.path.startswith("/v1/user/"):
-        username = request.path.removeprefix("/v1/user/").split("/", 1)[0]
+    if username is None and path.startswith(user_bp.url_prefix):
+        username = path.removeprefix(user_bp.url_prefix).split("/", 1)[0]
 
     if key is None and "key" in request.args:
         key = request.args["key"]
