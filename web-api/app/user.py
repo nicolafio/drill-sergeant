@@ -43,9 +43,6 @@ def _get_user_representation(user):
     return representation
 
 
-def _is_external_url(url):
-    return validators.url(url, public = True)
-
 @bp.route("/<user>", methods = ["GET"])
 @auth_key_required
 @user_existence_required
@@ -93,7 +90,7 @@ def _create_or_update_user(user):
             })
 
     for field in ["timesheet", "schedule"]:
-        if field in request_data and not _is_external_url(request_data[field]):
+        if field in request_data and not validators.url(request_data[field]):
             validation_problems.append({
                 "field": field,
                 "reason": "must be a valid URL"
