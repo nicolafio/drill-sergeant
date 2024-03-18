@@ -104,6 +104,7 @@ def _get_discipline_ical(user):
             "detail": "The user has no schedule"
         }, HTTPStatus.NOT_FOUND
 
+    # TODO: ensure that the URL is not calling internal services!
     response = requests.get(data["users"][user]["schedule"])
 
     if response.status_code != HTTPStatus.OK:
