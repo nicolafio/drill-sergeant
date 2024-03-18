@@ -2,6 +2,8 @@ from weakref import WeakKeyDictionary
 
 import pytest
 
+import responses
+
 from app import create_app
 
 _ROOT_AUTH_HEADERS = WeakKeyDictionary()
@@ -25,3 +27,8 @@ def data(app):
     with app.app_context():
         from app.data import get_data
         return get_data()
+
+@pytest.fixture()
+def mocked_responses():
+    with responses.RequestsMock() as rsps:
+        yield rsps
