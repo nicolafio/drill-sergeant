@@ -4,3 +4,4 @@ pytest
 pylint
 validators
 pyquery
+icalendar
