@@ -1,5 +1,3 @@
-from http import HTTPStatus
-from base64 import b64encode
 from weakref import WeakKeyDictionary
 
 import pytest
